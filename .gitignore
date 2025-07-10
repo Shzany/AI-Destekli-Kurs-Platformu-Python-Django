@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# Ortam ve yapılandırma dosyaları
+.env
+*.env
+
+# VSCode ve IDE dosyaları
+.vscode/
+.idea/
+*.swp
+
+# MacOS
+.DS_Store
+
+# Pipenv
+Pipfile.lock
+
+# migrations
+**/migrations/
+!**/migrations/__init__.py

@@ -1,0 +1,34 @@
+```html
+<!-- ...existing code... -->
+
+{% if average_rating %}
+    <p>Ortalama Puan: {{ average_rating|floatformat:1 }}</p>
+{% else %}
+    <p>Henüz puan yok.</p>
+{% endif %}
+
+<form method="post" action="{% url 'add_rate' page.id %}">
+    {% csrf_token %}
+    <label for="rate">Puanla:</label>
+    <select name="value" id="rate" required>
+        <option value="">Seçiniz</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <button type="submit">Gönder</button>
+</form>
+
+<h4>Puanlar:</h4>
+<ul>
+    {% for rate in rates %}
+        <li>{{ rate.value }} {% if rate.user %}- {{ rate.user.username }}{% endif %}</li>
+    {% empty %}
+        <li>Henüz puan yok.</li>
+    {% endfor %}
+</ul>
+
+<!-- ...existing code... -->
+```

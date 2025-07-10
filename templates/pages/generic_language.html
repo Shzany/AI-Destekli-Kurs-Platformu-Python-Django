@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+            {% for p in pages %}
+            <a href="{% url 'language_detail' language|lower p.slug %}" 
+               class="list-group-item page-link">
+                {{ p.title }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="main-content">
+            {% if page %}
+                {% include 'pages/detail.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/content-loader.js"></script>
+{% endblock %}

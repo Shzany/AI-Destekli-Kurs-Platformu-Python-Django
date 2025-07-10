@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 rounded-lg" style="background-color: #f8f9fa;">
+                <div class="card-header text-center py-4" style="background-color: #343a40; border-bottom: 3px solid #6c757d;">
+                    <h3 class="mb-0 text-white"><i class="fas fa-sign-in-alt me-2"></i>Giriş Yap</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        {% endif %}
+                        <div class="mb-3">
+                            <label class="small mb-1" for="username" style="color: #495057;">
+                                <i class="fas fa-user me-2 text-secondary"></i>Kullanıcı Adı
+                            </label>
+                            <input class="form-control bg-white" id="username" name="username" type="text" required 
+                                   style="border: 1px solid #ced4da; transition: all 0.3s;">
+                        </div>
+                        <div class="mb-4">
+                            <label class="small mb-1" for="password" style="color: #495057;">
+                                <i class="fas fa-lock me-2 text-secondary"></i>Şifre
+                            </label>
+                            <input class="form-control bg-white" id="password" name="password" type="password" required
+                                   style="border: 1px solid #ced4da; transition: all 0.3s;">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn text-white" type="submit" 
+                                    style="background-color: #495057; transition: all 0.3s;">
+                                Giriş Yap
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3" style="background-color: #e9ecef;">
+                    <div class="small">
+                        <a href="{% url 'register' %}" class="text-decoration-none" style="color: #495057;">
+                            Hesabınız yok mu? Kayıt ol!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #6c757d;
+        box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+    }
+    .btn:hover {
+        background-color: #343a40 !important;
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}

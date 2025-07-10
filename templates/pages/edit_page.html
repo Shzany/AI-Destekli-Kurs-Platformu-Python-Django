@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">İçerik Düzenle</h3>
+            <a href="javascript:history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Geri
+            </a>
+        </div>
+        <div class="card-body">
+            <form id="editForm" onsubmit="return savePage(event)">
+                <div class="mb-3">
+                    <label class="form-label">Başlık</label>
+                    <input type="text" class="form-control" id="editTitle" value="{{ page.title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kategori</label>
+                    <select class="form-control" id="editCategory" required>
+                        {% for cat in categories %}
+                            <option value="{{ cat }}" {% if cat == page.category %}selected{% endif %}>
+                                {{ cat|title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">İçerik</label>
+                    <textarea class="form-control" id="editContent" rows="15" required>{{ page.content }}</textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" onclick="history.back()" class="btn btn-secondary">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function savePage(event) {
+    event.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('title', document.getElementById('editTitle').value);
+    formData.append('content', document.getElementById('editContent').value);
+    formData.append('category', document.getElementById('editCategory').value);
+
+    fetch(`/page/save/{{ page.id }}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('İçerik başarıyla güncellendi');
+            window.location.href = `/courses/${document.getElementById('editCategory').value}/`;
+        } else {
+            alert('Hata: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('Bir hata oluştu: ' + error);
+    });
+
+    return false;
+}
+</script>
+{% endblock %}

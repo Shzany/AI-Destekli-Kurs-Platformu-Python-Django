@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ language }} Dersleri{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ language }} Dersleri</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for p in pages %}
+                    <a href="javascript:void(0);" 
+                       class="list-group-item list-group-item-action content-link {% if page.id == p.id %}active{% endif %}"
+                       data-url="{% url 'language_detail' language|lower p.slug %}">
+                        {{ p.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="content-area" class="card">
+                <div class="card-body">
+                    <div id="loading" style="display:none;" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Yükleniyor...</span>
+                        </div>
+                    </div>
+                    {% if page %}
+                        {% include 'pages/detail.html' %}
+                    {% else %}
+                        <div class="alert alert-info">Lütfen sol menüden bir ders seçin</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contentArea = document.getElementById('content-area').querySelector('.card-body');
+    const loading = document.getElementById('loading');
+
+    document.querySelectorAll('.content-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.dataset.url;
+            
+            // Aktif linki güncelle
+            document.querySelectorAll('.content-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Yükleme göster
+            contentArea.innerHTML = '';
+            loading.style.display = 'block';
+            
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                loading.style.display = 'none';
+                if (data.status === 'success') {
+                    contentArea.innerHTML = data.content;
+                    document.title = data.title;
+                    history.pushState({}, '', url);
+                } else {
+                    throw new Error(data.message || 'Bilinmeyen bir hata oluştu');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+                contentArea.innerHTML = `<div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    İçerik yüklenirken bir hata oluştu: ${error.message}
+                </div>`;
+            });
+        });
+    });
+
+    // Rate form handler
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.closest('.rate-form')) {
+            const form = e.target.closest('.rate-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('content-area').innerHTML = data.content;
+                        showRateSuccess();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+    });
+
+    // Yıldız hover efektleri
+    document.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('star-label')) {
+            const stars = e.target.closest('.star-rating').querySelectorAll('.star-label');
+            const index = Array.from(stars).indexOf(e.target);
+            
+            stars.forEach((star, i) => {
+                if (i <= index) {
+                    star.style.transform = 'scale(1.2)';
+                }
+            });
+        }
+    });
+
+    document.addEventListener('mouseout', function(e) {
+        if (e.target.classList.contains('star-label')) {
+            const stars = e.target.closest('.star-rating').querySelectorAll('.star-label');
+            stars.forEach(star => star.style.transform = 'scale(1)');
+        }
+    });
+
+    // Rate başarılı mesajı
+    function showRateSuccess() {
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success alert-dismissible fade show';
+        alert.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            Değerlendirmeniz kaydedildi!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('.rating-section').prepend(alert);
+    }
+});
+</script>
+{% endblock %}

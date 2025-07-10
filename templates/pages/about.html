@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="about-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="about-content">
+                    <h1 class="section-title">Hakkımızda</h1>
+                    <p class="lead mb-4">Programlama öğrenmenin en iyi yolu, pratik yaparak öğrenmektir.</p>
+                    <div class="about-text">
+                        <p>MEO-BlogAI, programlama dünyasında kendinizi geliştirmeniz için tasarlanmış bir eğitim platformudur. Amacımız, modern teknolojileri ve programlama dillerini herkes için erişilebilir kılmaktır.</p>
+                        <p>Platformumuzda:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle text-primary"></i> Detaylı programlama dersleri</li>
+                            <li><i class="fas fa-check-circle text-primary"></i> Pratik örnekler ve projeler</li>
+                            <li><i class="fas fa-check-circle text-primary"></i> Güncel teknoloji haberleri</li>
+                            <li><i class="fas fa-check-circle text-primary"></i> Yapay zeka ve makine öğrenimi içerikleri</li>
+                        </ul>
+                    </div>
+                    <div class="stats-container mt-4">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <i class="fas fa-book-open"></i>
+                                    <h3>5+</h3>
+                                    <p>Ders</p>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <i class="fas fa-code"></i>
+                                    <h3>6</h3>
+                                    <p>Programlama Dili</p>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <i class="fas fa-users"></i>
+                                    <h3>5+</h3>
+                                    <p>Öğrenci</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image-container">
+                    <img src="{% static 'img/about-hero.jpg' %}" alt="About Us" class="img-fluid rounded-3">
+                    <div class="experience-badge">
+                        <span class="number">2+</span>
+                        <span class="text">Yıllık<br>Deneyim</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

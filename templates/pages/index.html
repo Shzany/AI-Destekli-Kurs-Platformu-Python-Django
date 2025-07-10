@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="section-title mb-4">Son Eklenen İçerikler</h2>
+            <div class="row">
+                {% for content in latest_contents %}
+                <div class="col-md-4 mb-4">
+                    <div class="featured-card">
+                        <div class="featured-image">
+                            <img src="{% static content.image_url %}" alt="{{ content.title }}">
+                            <div class="category-badge">{{ content.category|title }}</div>
+                        </div>
+                        <div class="featured-content">
+                            <h3>{{ content.title }}</h3>
+                            <p>{{ content.content|striptags|truncatewords:20 }}</p>
+                            <div class="featured-footer">
+                                <a href="{% url 'language_page' content.category %}" class="btn btn-primary btn-sm">
+                                    Devamını Oku <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ content.last_update|date:"d.m.Y" }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="section-title mb-4">Tüm Dersler</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'python' %}" class="text-dark text-decoration-none text-center">
+                            <img src="{% static 'img/python.jpeg' %}" class="card-img-top" alt="Python Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">Python Programlama</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'java' %}" class="text-dark text-decoration-none text-center">
+                            <img src="{% static 'img/java.jpeg' %}" class="card-img-top" alt="Java Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">Java Programlama</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'csharp' %}" class="text-dark text-decoration-none text-center">
+                            <img src="{% static 'img/csharp.jpeg' %}" class="card-img-top" alt="C# Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">C# Programlama</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'javascript' %}" class="text-dark text-decoration-none text-center" >
+                            <img src="{% static 'img/javascript.jpeg' %}" class="card-img-top" alt="JavaScript Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">JavaScript Programlama</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'nlp' %}" class="text-dark text-decoration-none text-center">
+                            <img src="{% static 'img/nlp.jpeg' %}" class="card-img-top" alt="NLP Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">Doğal Dil İşleme</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <a href="{% url 'language_page' 'machinelearning' %}" class="text-dark text-decoration-none text-center">
+                            <img src="{% static 'img/makine.jpeg' %}" class="card-img-top" alt="MachineLearning Image"
+                                style="object-fit: cover; object-position: center; height: 180px;">
+                            <div class="card-body">
+                                <p class="card-text">Makine Öğrenmesi</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

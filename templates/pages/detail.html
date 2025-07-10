@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/538a3147e0.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+        rel="stylesheet">
+</head>
+<body>
+    <div class="content-detail">
+        <h2><i class="fas fa-graduation-cap me-2"></i>{{ page.title }}</h2>
+        <div class="mt-4" id="content">
+            {{ page.content|safe }}
+        </div>
+        <div class="mt-4 text-end">
+            <small class="text-muted">
+                <i class="fas fa-clock me-1"></i>
+                Son güncelleme: {{ page.last_update|date:"d.m.Y H:i" }}
+            </small>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <h1 class="mb-4">{{ page.title }}</h1>
+        
+        <div class="content">
+            {{ page.content|safe }}
+        </div>
+
+        <div class="rating-section mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-between align-items-center mb-4">
+                        <span>Değerlendirmeler</span>
+                        <span class="badge bg-primary fs-5">{{ average_rating|default:"0"|floatformat:1 }}/5</span>
+                    </h5>
+
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'add_rate' page.id %}" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-auto">
+                                <select name="value" class="form-select" required>
+                                    <option value="">Puan Seçin</option>
+                                    <option value="1">1 - Çok Kötü</option>
+                                    <option value="2">2 - Kötü</option>
+                                    <option value="3">3 - Orta</option>
+                                    <option value="4">4 - İyi</option>
+                                    <option value="5">5 - Çok İyi</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <textarea name="comment" class="form-control" rows="3" placeholder="Yorumunuzu yazın (İsteğe bağlı)"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Değerlendir</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    {% if rates %}
+                    <div class="user-ratings mt-4">
+                        <h6 class="border-bottom pb-2">Kullanıcı Değerlendirmeleri</h6>
+                        {% for rate in rates %}
+                        <div class="rating-item py-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <i class="fas fa-user-circle text-primary"></i>
+                                    <span class="fw-bold">{{ rate.user.username }}</span>
+                                </div>
+                                <span class="badge bg-primary">{{ rate.score }}/5</span>
+                            </div>
+                            {% if rate.comment %}
+                            <p class="mb-0 text-muted">{{ rate.comment }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Henüz değerlendirme yapılmamış.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Prism.js Scripts -->
+     
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+</body>
+</html>
+
+
